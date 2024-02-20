@@ -1,26 +1,32 @@
-#include <ncurses.h>
-#include <iostream>
+#include <string>
+#include <unistd.h>
+#include "map.hpp"
 
 int main() {
-	std::string block = "██";
+	std::ifstream mapF("map.txt");
+	Map map;
+	if (!mapF.is_open())
+		return (0);
+	map.readMap(mapF);
 	setlocale(LC_ALL, "");
 	initscr();
-    //cbreak(); // Disable line buffering
-    noecho(); // Don't echo input
+	cbreak();
+	noecho();
+	timeout(0);
 
-    // Display a prompt
-    printw("Press 'q' to quit...\n");
-    refresh(); // Refresh the screen to show the prompt
-
-    // Read user input in a loop
-    int ch;
-    while ((ch = getch()) != 'q') {
-		printw("%s\n", block.c_str());
+	while (true) {
+		if (map.getIsTetrominoActive() == false){
+			map.addTet(std::rand() % 7);
+			map.getIsTetrominoActive() = true;
+		}
+		map.move(getch());
+		map.printMap();
 		refresh();
-    }
-
-    // End ncurses
-    endwin();
-
-    return 0;
+		if (clock() - map.getStart() >= 1000000){
+			map.getStart() = clock();
+			map.move('s');
+		}
+	}
+	endwin();
+	return 0;
 }

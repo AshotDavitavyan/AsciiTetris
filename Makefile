@@ -1,16 +1,16 @@
 NAME	=	game	
 
 CC		= c++
-CPPFLAGS	= -Wall -Wextra -Werror -std=c++98#-fsanitize=address -g
+CPPFLAGS	= -Wall -Wextra -Werror -g#-fsanitize=address
 LDFLAGS = -lncurses
 RM		= rm -rf
 
 OBJ_DIR	= obj
 SRC_DIR = ./
-SRC		= game.cpp
+SRC		= game.cpp map.cpp
 OBJ		= $(patsubst %.cpp, $(OBJ_DIR)/%.o, $(SRC))
 
-HEADERS = game.hpp
+HEADERS = game.hpp map.hpp
 
 all: $(NAME)
 
